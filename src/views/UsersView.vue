@@ -16,49 +16,21 @@
 
   <button @click="prevPage">Atras</button>
   <button @click="nextPage">Siguiente</button>
-  <span>Pagina: {{currentPage}}</span>
+  <span>Pagina: {{ currentPage }}</span>
 </template>
 
 <script>
-import { ref } from "vue";
-import axios from "axios";
+import useUsers from "@/composables/useUsers.js";
 export default {
   setup() {
-    const users = ref([]);
-    const isLoading = ref(true);
-    const currentPage = ref(1);
-    const errorMessage = ref();
-
-    const getUsers = async (page = 1) => {
-      if (page <= 0) page = 1;
-
-      isLoading.value = true;
-
-      const { data } = await axios.get("https://reqres.in/api/users", {
-        params: { page },
-      });
-
-      if (data.data.length > 0) {
-        users.value = data.data;
-        currentPage.value = page;
-        errorMessage.value = null
-      } else if (currentPage.value > 0) {
-        errorMessage.value = "NO HAY MAS DATA";
-      }
-
-      isLoading.value = false;
-    };
-
-    getUsers();
+    const { prevPage, nextPage, currentPage, users, errorMessage } = useUsers();
 
     return {
+      prevPage,
+      nextPage,
       currentPage,
-      currentPage,
-      errorMessage,
-      isLoading,
       users,
-      nextPage: () => getUsers(currentPage.value +1),
-      prevPage: () => getUsers(currentPage.value -1),
+      errorMessage,
     };
   },
 };

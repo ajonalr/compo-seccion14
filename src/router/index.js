@@ -22,6 +22,12 @@ const routes = [{
             import ( /* webpackChunkName: "counter" */ '../views/CounterView.vue')
     },
     {
+        path: '/todo',
+        name: 'todo',
+        component: () =>
+            import ( /* webpackChunkName: "counter" */ '../views/TodoView.vue')
+    },
+    {
         path: '/users',
         name: 'users',
         component: () =>

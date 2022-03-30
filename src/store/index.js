@@ -15,12 +15,35 @@ export default createStore({
     },
     getters: {
         pendigTodos(state, getters, rootState) {
+            return state.todos.filter(todo => !todo.completed);
+        },
+        completedTodo(state, getters, rootState) {
+            return state.todos.filter(todo => todo.completed)
+        },
+        allTodo(state, getters, rootState) {
+            return state.todos
+        },
+        getTodoByTab: (__, getters) => (currenTab) => {
 
-            return state.todos.filter(todo => !todo.completed == false);
+            switch (currenTab) {
+                case 'all':
+                    return getters.allTodo
+                case 'pending':
+                    return getters.pendigTodos
+                case 'completed':
+                    return getters.completedTodo
+            }
 
         }
     },
-    mutations: {},
+    mutations: {
+
+        toggelTodo(state, id) {
+            const todoIxd = state.todos.findIndex(todo => todo.id === id);
+            state.todos[todoIxd].completed = !state.todos[todoIxd].completed;
+        }
+
+    },
     actions: {},
     modules: {}
 })

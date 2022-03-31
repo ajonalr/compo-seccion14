@@ -1,7 +1,5 @@
 <template>
   <h1>Lista de Tareas de Thanos</h1>
-  <h4>Tareas Pedientes: {{ pendig.length }}</h4>
-
   <hr />
 
   <button @click="currentTab = 'all'" :class="{ active: currentTab === 'all' }">
@@ -32,26 +30,56 @@
       </li>
     </ul>
   </div>
+
+  <button @click="openModal">Crear Todo</button>
+
+  <Modal v-if="isOpen" @on:close="closeModal">
+    <template v-slot:header>
+      <h1>Crear Nueva Tarea</h1>
+    </template>
+
+    <template v-slot:main>
+      <form @submit.prevent="createdTodo">
+        <input type="text" v-model="text" />
+        <button type="submit">Crear</button>
+      </form>
+    </template>
+
+    <template v-slot:footer>
+      <button @click="closeModal">Salir</button>
+    </template>
+  </Modal>
 </template>
 
 <script>
-import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import useTodo from "@/composables/useTodos";
+import { defineAsyncComponent } from "vue";
+
 export default {
+  components: {
+    Modal: defineAsyncComponent(() => import("@/components/Modal.vue")),
+  },
   setup() {
-    const store = useStore();
-    const currentTab = ref("all");
+    const {
+      currentTab,
+      getTodoByTab,
+      togelTodo,
+      isOpen,
+      openModal,
+      closeModal,
+      createdTodo,
+      text,
+    } = useTodo();
 
     return {
       currentTab,
-      pendig: computed(() => store.getters["pendigTodos"]),
-      all: computed(() => store.getters["allTodo"]),
-      completed: computed(() => store.getters["completedTodo"]),
-      getTodoByTab: computed(() =>
-        store.getters["getTodoByTab"](currentTab.value)
-      ),
-      // methods
-      togelTodo: (id) => store.commit("toggelTodo", id),
+      getTodoByTab,
+      togelTodo,
+      isOpen,
+      openModal,
+      closeModal,
+      createdTodo,
+      text,
     };
   },
 };

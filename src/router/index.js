@@ -43,6 +43,11 @@ const routes = [{
         name: 'pokemon-id',
         component: () =>
             import ( /* webpackChunkName: "counter" */ '../views/Pokemon.vue')
+    }, {
+        path: '/custom-slot',
+        name: 'c-slot',
+        component: () =>
+            import ( /* webpackChunkName: "custom Slot" */ '../views/CustomSlots.vue')
     }
 
 ]

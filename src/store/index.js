@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-
+import { v4 as uuidV4 } from 'uuid'
 export default createStore({
     state: {
         todos: [
@@ -41,6 +41,16 @@ export default createStore({
         toggelTodo(state, id) {
             const todoIxd = state.todos.findIndex(todo => todo.id === id);
             state.todos[todoIxd].completed = !state.todos[todoIxd].completed;
+        },
+        createdTodo(state, text = '') {
+            if (text.length <= 0) {
+                return;
+            }
+            state.todos.push({
+                id: uuidV4(),
+                completed: false,
+                text
+            })
         }
 
     },
